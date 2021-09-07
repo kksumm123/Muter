@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
             move.Normalize();
 
             relateMove = Vector3.zero;
-            relateMove = transform.forward * move.z;
-            relateMove += transform.right * move.x;
+            relateMove = Camera.main.transform.forward * move.z;
+            relateMove += Camera.main.transform.right * move.x;
             relateMove.y = 0;
             transform.Translate(speed * Time.deltaTime * relateMove, Space.World);
         }
