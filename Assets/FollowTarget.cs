@@ -7,16 +7,19 @@ public class FollowTarget : MonoBehaviour
 {
     public Transform target;
     [SerializeField] Vector3 moveBackValue;
+    float originSize;
     void Start()
     {
-        moveBackValue = new Vector3(0, 30, -25);
+        moveBackValue = new Vector3(0, 60, -50);
         rotateDegree = 0;
+        originSize = Camera.main.orthographicSize;
     }
 
 
     void Update()
     {
         RelativeRotation();
+        ZoomInOut();
     }
 
     [SerializeField] float rotateDegreeValue = 5;
@@ -41,6 +44,23 @@ public class FollowTarget : MonoBehaviour
         transform.Translate(moveBackValue);
         transform.LookAt(target);
     }
+
+    float scrollMult = 1;
+    float minScrollMultValue = 1;
+    float maxScrollMultValue = 2;
+    float tempScrollDeltaY;
+    void ZoomInOut()
+    {
+        tempScrollDeltaY = Input.mouseScrollDelta.y;
+        if (tempScrollDeltaY != 0)
+        {
+            scrollMult -= tempScrollDeltaY * 0.1f;
+            scrollMult = Mathf.Min(scrollMult, maxScrollMultValue);
+            scrollMult = Mathf.Max(scrollMult, minScrollMultValue);
+            Camera.main.orthographicSize = originSize * scrollMult;
+        }
+    }
+
 }
 static public class MyExtension
 {
