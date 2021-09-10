@@ -1,16 +1,15 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowTarget : MonoBehaviour
+public class TestOrbit : MonoBehaviour
 {
     public Transform target;
     [SerializeField] Vector3 moveBackValue;
     float originSize;
     void Start()
     {
-        moveBackValue = new Vector3(0, 60, -50);
+        moveBackValue = new Vector3(0, 12, -10);
         rotateDegree = 0;
         originSize = Camera.main.orthographicSize;
     }
@@ -22,8 +21,8 @@ public class FollowTarget : MonoBehaviour
         ZoomInOut();
     }
 
-    [SerializeField] float rotateDegreeValue = 5;
-    float rotateDegree;
+    [SerializeField] float rotateDegreeValue = 2;
+    [SerializeField] float rotateDegree;
     float forwardDegree;
     float dirRadian;
     Vector3 dir;
@@ -33,7 +32,15 @@ public class FollowTarget : MonoBehaviour
             rotateDegree += rotateDegreeValue;
         if (Input.GetKey(KeyCode.E))
             rotateDegree -= rotateDegreeValue;
+        //RotationMatrix();
+        //PositionToTarget();
+        //MoveBack();
+        //Lookat();
+    }
 
+    [ContextMenu("방향설정")]
+    private void RotationMatrix()
+    {
         //삼각함수 회전변환 https://m.blog.naver.com/junhyuk7272/220140840595
         forwardDegree = transform.forward.VectorToDegree();
         dirRadian = (rotateDegree + 90) * Mathf.PI / 180;
@@ -41,8 +48,20 @@ public class FollowTarget : MonoBehaviour
         dir.z = Mathf.Sin(dirRadian);
 
         transform.forward = dir;
+    }
+    [ContextMenu("타겟 포지션으로 이동")]
+    private void PositionToTarget()
+    {
         transform.position = target.position;
+    }
+    [ContextMenu("회전 값에 대한 상대적 이동")]
+    private void MoveBack()
+    {
         transform.Translate(moveBackValue);
+    }
+    [ContextMenu("타겟 바라보기")]
+    private void Lookat()
+    {
         transform.LookAt(target);
     }
 
@@ -62,12 +81,4 @@ public class FollowTarget : MonoBehaviour
         }
     }
 
-}
-static public class MyExtension
-{
-    public static float VectorToDegree(this Vector3 v)
-    {
-        float radian = Mathf.Atan2(v.z, v.x);
-        return (radian * Mathf.Rad2Deg);
-    }
 }
