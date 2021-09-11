@@ -18,13 +18,15 @@ public class Player : Actor
         gravityAcceleration = 9.81f;
         gravityVelocity = 0;
         s = 0;
+        jumpVelo = Vector3.zero;
+        controller.Move(jumpVelo);
     }
     #endregion InitGravity
     void Start()
     {
-        InitGravity();
         controller = GetComponent<CharacterController>();
         mapLayer = 1 << LayerMask.NameToLayer("Map");
+        InitGravity();
     }
 
     void Update()
@@ -35,20 +37,6 @@ public class Player : Actor
         Move();
         Jump();
     }
-
-    #region Jump
-    float jumpForce = 2f;
-    Vector3 jumpVector;
-    void Jump()
-    {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            State = StateType.Jump;
-            jumpVector.y += 
-        }
-        controller.Move(jumpVector);
-    }
-    #endregion Jump
 
     #region StateUpdate
     void StateUpdate()
@@ -81,6 +69,49 @@ public class Player : Actor
     #endregion IsGround
     #endregion StateUpdate
 
+    #region UseGravity
+    void UseGravity()
+    {
+        if (IsGround() == true)
+        {
+            print("¶¥");
+            InitGravity(); //¶¥¿¡ ´ê¾ÒÀ¸¸é
+        }
+        else
+        {
+            print("°øÁß");
+            gravityAccelerationMove(); // ¶¥¿¡ ¾È´ê¾ÒÀ¸¸é
+        }
+
+    }
+    float t;
+    void gravityAccelerationMove()
+    {
+        t = Time.deltaTime;
+        s = gravityVelocity + (0.5f * gravityAcceleration * Mathf.Pow(t, 2));
+        gravityVelocity += gravityAcceleration * t;
+
+        jumpVelo.y -= s * t;
+        controller.Move(jumpVelo);
+    }
+    #endregion UseGravity
+
+    #region LookAtMouse
+    Plane plane = new Plane(new Vector3(0, 1, 0), 0);
+    void LookAtMouse()
+    {
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (plane.Raycast(ray, out float enter))
+        {
+            Vector3 hitPoint = ray.GetPoint(enter);
+            Vector3 dir = hitPoint - transform.position;
+            dir.y = 0;
+            dir.Normalize();
+            RotationSlerp(dir);
+        }
+    }
+    #endregion LookAtMouse
+
     #region Move
     Vector3 move;
     Vector3 relateMove;
@@ -101,47 +132,23 @@ public class Player : Actor
             relateMove = Camera.main.transform.forward * move.z;
             relateMove += Camera.main.transform.right * move.x;
             relateMove.y = 0;
-            transform.Translate(speed * Time.deltaTime * relateMove, Space.World);
+            //controller.Move(speed * Time.deltaTime * relateMove);
         }
     }
     #endregion Move
 
-    #region LookAtMouse
-    Plane plane = new Plane(new Vector3(0, 1, 0), 0);
-    void LookAtMouse()
+    #region Jump
+    [SerializeField] float jumpForce = 2f;
+    Vector3 jumpVelo;
+    void Jump()
     {
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (plane.Raycast(ray, out float enter))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            Vector3 dir = hitPoint - transform.position;
-            dir.y = 0;
-            dir.Normalize();
-            RotationSlerp(dir);
+            State = StateType.Jump;
+            jumpVelo.y += Mathf.Sqrt(jumpForce * 3 * gravityAcceleration);
         }
     }
-    #endregion LookAtMouse
-
-    #region UseGravity
-    void UseGravity()
-    {
-        if (IsGround() == false)
-            gravityAccelerationMove(); // ¶¥¿¡ ¾È´ê¾ÒÀ¸¸é
-        else
-            InitGravity(); //¶¥¿¡ ´ê¾ÒÀ¸¸é
-    }
-    float t;
-    void gravityAccelerationMove()
-    {
-        t = Time.deltaTime;
-
-        s = gravityVelocity + (0.5f * gravityAcceleration * Mathf.Pow(t, 2));
-
-        controller.Move(new Vector3(0, -s * t, 0));
-
-        gravityVelocity += gravityAcceleration * t;
-    }
-    #endregion UseGravity
+    #endregion Jump
 
     #region StateType
     enum StateType
