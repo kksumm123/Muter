@@ -9,6 +9,7 @@ public class Player : Actor
 
     [SerializeField] float speed = 25f;
 
+    [SerializeField] Transform weaponPosition;
     WeaponInfo currentWeapon;
     [SerializeField] WeaponInfo mainWeapon;
     [SerializeField] WeaponInfo subWeapon;
@@ -32,13 +33,30 @@ public class Player : Actor
         controller = GetComponent<CharacterController>();
         mapLayer = 1 << LayerMask.NameToLayer("Map");
         InitGravity();
-        InitWeapon(mainWeapon);
+        
+        ChangeWeapon(mainWeapon);
     }
 
-    void InitWeapon(WeaponInfo weapon)
+
+    WeaponInfo InitWeapon(WeaponInfo weaponInfo)
     {
-        currentWeapon = weapon;
-        currentWeapon.Init();
+        if (weaponInfo != null)
+        {
+            var newWeaponGo = Instantiate(weaponInfo, weaponPosition.position, Quaternion.identity, weaponPosition);
+            newWeaponGo.Init();
+            return newWeaponGo;
+        }
+        Debug.LogError($"무기 비어있음 {weaponInfo}");
+        return null;
+    }
+    void ChangeWeapon(WeaponInfo weaponInfo)
+    {
+        Destroy(currentWeapon);
+
+        currentWeapon = InitWeapon(weaponInfo);
+        
+        if (currentWeapon == null)
+            return; // 비었을 경우 방어코드
     }
 
     void Update()
@@ -244,7 +262,7 @@ public class Player : Actor
                 switch (currentWeapon.weaponType)
                 {
                     case WeaponInfo.WeaponType.None:
-                        Debug.LogWarning($"오류 : 무기 타입 None, {currentWeapon}");
+                        Debug.LogError($"오류 : 무기 타입 None, {currentWeapon}");
                         return;
                     case WeaponInfo.WeaponType.Gun:
                         currentWeapon.StartCoroutine(AttackShotCo());

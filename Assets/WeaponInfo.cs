@@ -39,7 +39,7 @@ public class WeaponInfo : MonoBehaviour
 
     public void Init()
     {
-
+        gameObject.SetActive(true);
         if (weaponType == WeaponType.Gun)
         {
             bulletSpawnPosition = transform.Find("BulletSpawnPosition");
