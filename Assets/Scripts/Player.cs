@@ -280,7 +280,6 @@ public class Player : Actor
         }
     }
 
-    float shotPreDelay = 0.05f;
     IEnumerator AttackShotCo()
     {
         // Shot Animation Speed 3
@@ -288,6 +287,10 @@ public class Player : Actor
         yield return null;
 
         var bulletGo = Instantiate(Bullet, BulletPosition.position, transform.rotation);
+        if (bulletGo.transform.position.y > 2)
+            print("NormalShot");
+        else
+            print("Error : RunAnimaion Shot");
         //Instantiate(BulletCase, BulletCasePosition.position, Quaternion.identity);
         // ÃÑ¾Ë ³Ë¹é ÀÛ¼ºÇØ¾ßÇÔ
         // bulletGo.knockBackForce = currentWeapon.knockBackForce;
