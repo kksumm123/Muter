@@ -4,15 +4,41 @@ using UnityEngine;
 
 public class WeaponInfo : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum WeaponType
     {
-        
+        None,
+        Gun,
+        Melee,
+        Throw,
     }
+    public WeaponType weaponType;
+    public float power = 20;
+    [SerializeField] float addedRandomPowerValue = 4;
+    public float delay = 0.2f;
+    public float kncoBackForce = 1;
 
-    // Update is called once per frame
-    void Update()
+    [Header("√—")]
+    public GameObject bullet;
+    public Transform bulletSpawnPosition;
+    public int currentClipBulletCount = 10;
+    public int maxClipBulletCount = 20;
+    public int allBulletCount = 500;
+    public int maxBulletCount = 500;
+    public float reloadTime = 2;
+
+    [Header("±Ÿ¡¢")]
+    public float attackStartTime = 0.3f;
+    public float attackTime = 0.15f;
+    Collider attackCollider;
+
+    [Header("≈ı√¥")]
+    public GameObject throwGo;
+
+    public void Init()
     {
-        
+        if (weaponType == WeaponType.Gun)
+            bulletSpawnPosition = transform.Find("BulletSpawnPosition");
+        else
+            attackCollider = transform.Find("AttackCollider").GetComponent<Collider>();
     }
 }
