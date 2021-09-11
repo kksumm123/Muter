@@ -156,10 +156,36 @@ public class Player : Actor
     #region Dodge
     void Dodge()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && IsAbleDodge())
         {
-
+            StartCoroutine(DodgeCo());
         }
+    }
+
+    bool IsAbleDodge()
+    {
+        if (State == StateType.Dodge)
+            return false;
+        if (IsGround() != true)
+            return false;
+
+        return true;
+    }
+
+    float dodgeMoveTime = 0.54f;
+    float dodgeSpeed = 35;
+    IEnumerator DodgeCo()
+    {
+        // dodge anim speed is 2
+        State = StateType.Dodge;
+        var dodgeDir = transform.forward;
+        var endTime = Time.time + dodgeMoveTime;
+        while (Time.time < endTime)
+        {
+            controller.Move(dodgeSpeed * Time.deltaTime * dodgeDir);
+            yield return null;
+        }
+        State = StateType.Idle;
     }
     #endregion Dodge
 
