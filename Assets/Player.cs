@@ -13,9 +13,18 @@ public class Player : Actor
 
     void Update()
     {
+        StateUpdate();
         Move();
         LookAtMouse();
+
     }
+
+    #region StateUpdate
+    void StateUpdate()
+    {
+    
+    }
+    #endregion StateUpdate
 
     #region Move
     Vector3 move;
@@ -57,6 +66,36 @@ public class Player : Actor
         }
     }
     #endregion LookAtMouse
+
+    #region StateType
+    enum StateType
+    {
+        Idle,
+        Run,
+        Jump,
+        Land,
+        Dodge,
+        Shot,
+        Reload,
+        Throw,
+        Swap,
+        Swing,
+    }
+    StateType m_state;
+    StateType State
+    {
+        get => m_state;
+        set
+        {
+            if (m_state == value)
+                return;
+
+            print($"PlayerState : {m_state} -> {value}");
+            m_state = value;
+            PlayAnimation(m_state.ToString());
+        }
+    }
+    #endregion StateType
 
     #region Methods
 
