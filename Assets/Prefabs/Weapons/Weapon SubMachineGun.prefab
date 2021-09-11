@@ -49,10 +49,12 @@ MonoBehaviour:
   weaponType: 1
   power: 20
   addedRandomPowerValue: 4
-  delay: 0.2
+  delay: 0.05
   kncoBackForce: 1
   bullet: {fileID: 0}
-  bulletSpawnPosition: {fileID: 4791732271536635396}
+  bulletPosition: {fileID: 0}
+  bulletCase: {fileID: 0}
+  bulletCasePosition: {fileID: 0}
   currentClipBulletCount: 10
   maxClipBulletCount: 20
   allBulletCount: 500

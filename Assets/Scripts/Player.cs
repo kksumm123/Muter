@@ -280,18 +280,20 @@ public class Player : Actor
         }
     }
 
+    float shotPreDelay = 0.05f;
     IEnumerator AttackShotCo()
     {
-        yield return null;
         // Shot Animation Speed 3
         State = StateType.Shot;
-        var bulletGo = Instantiate(Bullet, BulletPosition.position, Quaternion.Euler(transform.forward));
-        Instantiate(BulletCase, BulletCasePosition.position, Quaternion.identity);
+        yield return null;
+
+        var bulletGo = Instantiate(Bullet, BulletPosition.position, transform.rotation);
+        //Instantiate(BulletCase, BulletCasePosition.position, Quaternion.identity);
         // ÃÑ¾Ë ³Ë¹é ÀÛ¼ºÇØ¾ßÇÔ
         // bulletGo.knockBackForce = currentWeapon.knockBackForce;
 
         yield return new WaitForSeconds(currentWeapon.delay);
-        State = StateType.Idle;
+        State = StateType.ShotEnd;
     }
     #endregion Attack
 
@@ -323,6 +325,7 @@ public class Player : Actor
         Land,
         Dodge,
         Shot,
+        ShotEnd,
         Reload,
         Throw,
         Swap,
@@ -339,6 +342,9 @@ public class Player : Actor
 
             print($"PlayerState : {m_state} -> {value}");
             m_state = value;
+
+            if (m_state == StateType.ShotEnd)
+                return;
             PlayAnimation(m_state.ToString());
         }
     }
