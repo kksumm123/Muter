@@ -47,7 +47,7 @@ public class FollowTarget : MonoBehaviour
     }
 
     float scrollMult = 1;
-    float minScrollMultValue = 1;
+    float minScrollMultValue = 0.5f;
     float maxScrollMultValue = 2;
     float tempScrollDeltaY;
     void ZoomInOut()
