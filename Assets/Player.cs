@@ -19,7 +19,6 @@ public class Player : Actor
         gravityVelocity = 0;
         s = 0;
         jumpVelo = Vector3.zero;
-        controller.Move(jumpVelo);
     }
     #endregion InitGravity
     void Start()
