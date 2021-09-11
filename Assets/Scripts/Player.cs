@@ -51,10 +51,13 @@ public class Player : Actor
         LookAtMouse();
         if (State != StateType.Dodge)
         {
-            Move();
-            Jump();
-            Dodge();
-            Attack();
+            if (IsBattleState() == false)
+            {
+                Move();
+                Jump();
+                Dodge();
+                Attack();
+            }
         }
         UseGravity();
     }
@@ -63,6 +66,9 @@ public class Player : Actor
     #region StateUpdate
     void StateUpdate()
     {
+        if (IsBattleState() == true)
+            return;
+
         if (IsGround() == true)
         {
             if (State == StateType.Dodge)
@@ -102,6 +108,20 @@ public class Player : Actor
         yield return new WaitForSeconds(landTime);
         State = StateType.Idle;
         isLanded = false;
+    }
+
+    bool IsBattleState()
+    {
+        switch (State)
+        {
+            case StateType.Shot:
+            case StateType.Reload:
+            case StateType.Throw:
+            case StateType.Swap:
+            case StateType.Swing:
+                return true;
+        }
+        return false;
     }
 
     #region IsGround
@@ -210,22 +230,43 @@ public class Player : Actor
     #endregion Dodge
 
     #region Attack
+    GameObject Bullet => currentWeapon.bullet;
+    Transform BulletSpawnPosition => currentWeapon.bulletSpawnPosition;
+    float attackableTime;
     void Attack()
     {
         if (Input.GetMouseButton(0))
         {
-            switch (currentWeapon.weaponType)
+            if (attackableTime < Time.time)
             {
-                case WeaponInfo.WeaponType.None:
-                    break;
-                case WeaponInfo.WeaponType.Gun:
-                    break;
-                case WeaponInfo.WeaponType.Melee:
-                    break;
-                case WeaponInfo.WeaponType.Throw:
-                    break;
+                switch (currentWeapon.weaponType)
+                {
+                    case WeaponInfo.WeaponType.None:
+                        Debug.LogWarning($"오류 : 무기 타입 None, {currentWeapon}");
+                        return;
+                    case WeaponInfo.WeaponType.Gun:
+                        currentWeapon.StartCoroutine(AttackShotCo());
+                        break;
+                    case WeaponInfo.WeaponType.Melee:
+                        break;
+                    case WeaponInfo.WeaponType.Throw:
+                        break;
+                }
+                attackableTime = Time.time + currentWeapon.delay;
             }
         }
+    }
+
+    IEnumerator AttackShotCo()
+    {
+        yield return null;
+        // Shot Animation Speed 3
+        State = StateType.Shot;
+        var bulletGo = Instantiate(Bullet, BulletSpawnPosition.position, Quaternion.Euler(transform.forward));
+        // 총알 넉백 작성해야함
+        // bulletGo.knockBackForce = currentWeapon.knockBackForce;
+        yield return new WaitForSeconds(currentWeapon.delay);
+        State = StateType.Idle;
     }
     #endregion Attack
 
