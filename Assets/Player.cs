@@ -36,9 +36,12 @@ public class Player : Actor
             InitGravity(); //¶¥¿¡ ´ê¾ÒÀ¸¸é
 
         LookAtMouse();
-        Move();
-        Jump();
-        Dodge();
+        if (State != StateType.Dodge)
+        {
+            Move();
+            Jump();
+            Dodge();
+        }
         UseGravity();
     }
 
@@ -48,6 +51,9 @@ public class Player : Actor
     {
         if (IsGround() == true)
         {
+            if (State == StateType.Dodge)
+                return;
+
             if (move == Vector3.zero)
             {
                 switch (State)
