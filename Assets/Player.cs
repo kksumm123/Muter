@@ -8,7 +8,7 @@ public class Player : Actor
     [SerializeField] float speed = 25f;
     void Start()
     {
-
+        mapLayer = 1 << LayerMask.NameToLayer("Map");
     }
 
     void Update()
@@ -22,8 +22,27 @@ public class Player : Actor
     #region StateUpdate
     void StateUpdate()
     {
-    
+        if (IsGround() == true)
+        {
+            if (move == Vector3.zero)
+                State = StateType.Idle;
+            else
+                State = StateType.Run;
+        }
     }
+
+    #region IsGround
+    LayerMask mapLayer;
+    bool IsGround()
+    {
+        return IsHitRay(transform.position, Vector3.down, 0.1f);
+    }
+
+    bool IsHitRay(Vector3 pos, Vector3 dir, float distance)
+    {
+        return Physics.Raycast(pos, dir, distance, mapLayer);
+    }
+    #endregion IsGround
     #endregion StateUpdate
 
     #region Move
@@ -81,7 +100,7 @@ public class Player : Actor
         Swap,
         Swing,
     }
-    StateType m_state;
+    [SerializeField] StateType m_state;
     StateType State
     {
         get => m_state;
