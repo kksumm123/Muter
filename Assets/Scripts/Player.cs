@@ -41,6 +41,7 @@ public class Player : Actor
             Move();
             Jump();
             Dodge();
+            Attack();
         }
         UseGravity();
     }
@@ -194,6 +195,13 @@ public class Player : Actor
         State = StateType.Idle;
     }
     #endregion Dodge
+
+    #region Attack
+    void Attack()
+    {
+
+    }
+    #endregion Attack
 
     #region UseGravity
     void UseGravity()
