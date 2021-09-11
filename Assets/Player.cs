@@ -5,19 +5,50 @@ using UnityEngine;
 
 public class Player : Actor
 {
+    CharacterController controller;
+
     [SerializeField] float speed = 25f;
+
+    #region InitGravity
+    float gravityAcceleration = 9.81f;
+    float gravityVelocity;
+    float s;
+    void InitGravity()
+    {
+        gravityAcceleration = 9.81f;
+        gravityVelocity = 0;
+        s = 0;
+    }
+    #endregion InitGravity
     void Start()
     {
+        InitGravity();
+        controller = GetComponent<CharacterController>();
         mapLayer = 1 << LayerMask.NameToLayer("Map");
     }
 
     void Update()
     {
         StateUpdate();
-        Move();
+        UseGravity();
         LookAtMouse();
-
+        Move();
+        Jump();
     }
+
+    #region Jump
+    float jumpForce = 2f;
+    Vector3 jumpVector;
+    void Jump()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            State = StateType.Jump;
+            jumpVector.y += 
+        }
+        controller.Move(jumpVector);
+    }
+    #endregion Jump
 
     #region StateUpdate
     void StateUpdate()
@@ -29,13 +60,18 @@ public class Player : Actor
             else
                 State = StateType.Run;
         }
+        else
+        {
+
+        }
     }
 
     #region IsGround
     LayerMask mapLayer;
     bool IsGround()
     {
-        return IsHitRay(transform.position, Vector3.down, 0.1f);
+        //return IsHitRay(transform.position, Vector3.down, 0.1f);
+        return controller.isGrounded;
     }
 
     bool IsHitRay(Vector3 pos, Vector3 dir, float distance)
@@ -85,6 +121,27 @@ public class Player : Actor
         }
     }
     #endregion LookAtMouse
+
+    #region UseGravity
+    void UseGravity()
+    {
+        if (IsGround() == false)
+            gravityAccelerationMove(); // ¶¥¿¡ ¾È´ê¾ÒÀ¸¸é
+        else
+            InitGravity(); //¶¥¿¡ ´ê¾ÒÀ¸¸é
+    }
+    float t;
+    void gravityAccelerationMove()
+    {
+        t = Time.deltaTime;
+
+        s = gravityVelocity + (0.5f * gravityAcceleration * Mathf.Pow(t, 2));
+
+        controller.Move(new Vector3(0, -s * t, 0));
+
+        gravityVelocity += gravityAcceleration * t;
+    }
+    #endregion UseGravity
 
     #region StateType
     enum StateType
