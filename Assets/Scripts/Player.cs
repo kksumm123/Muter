@@ -33,7 +33,7 @@ public class Player : Actor
         controller = GetComponent<CharacterController>();
         mapLayer = 1 << LayerMask.NameToLayer("Map");
         InitGravity();
-        
+
         ChangeWeapon(mainWeapon);
     }
 
@@ -57,7 +57,7 @@ public class Player : Actor
         Destroy(currentWeapon);
 
         currentWeapon = InitWeapon(weaponInfo);
-        
+
         if (currentWeapon == null)
             return; // 비었을 경우 방어코드
     }
@@ -287,10 +287,6 @@ public class Player : Actor
         yield return null;
 
         var bulletGo = Instantiate(Bullet, BulletPosition.position, transform.rotation);
-        if (bulletGo.transform.position.y > 2)
-            print("NormalShot");
-        else
-            print("Error : RunAnimaion Shot");
         //Instantiate(BulletCase, BulletCasePosition.position, Quaternion.identity);
         // 총알 넉백 작성해야함
         // bulletGo.knockBackForce = currentWeapon.knockBackForce;
@@ -346,9 +342,25 @@ public class Player : Actor
             print($"PlayerState : {m_state} -> {value}");
             m_state = value;
 
-            if (m_state == StateType.ShotEnd)
-                return;
-            PlayAnimation(m_state.ToString());
+            switch (m_state)
+            {
+                case StateType.ShotEnd:
+                    return;
+                case StateType.Shot:
+                    PlayAnimation(m_state.ToString(), 0);
+                    break;
+                case StateType.Idle:
+                case StateType.Run:
+                case StateType.Jump:
+                case StateType.Land:
+                case StateType.Dodge:
+                case StateType.Reload:
+                case StateType.Throw:
+                case StateType.Swap:
+                case StateType.Swing:
+                    PlayAnimation(m_state.ToString());
+                    break;
+            }
         }
     }
     #endregion StateType

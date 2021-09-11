@@ -15,6 +15,10 @@ public class Actor : MonoBehaviour
     {
         animator.Play(stateName);
     }
+    protected void PlayAnimation(string stateName, float normalizeTime)
+    {
+        animator.Play(stateName, 0, normalizeTime);
+    }
 
     protected float fastAimingDistance = 0.2f;
     protected float lookatRotationValue = 0.05f;
