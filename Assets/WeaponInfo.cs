@@ -18,11 +18,12 @@ public class WeaponInfo : MonoBehaviour
     public float kncoBackForce = 1;
 
     [Header("รั")]
+    readonly string bulletString = "Bullet";
     public GameObject bullet;
-    public Transform bulletSpawnPosition;
+    public Transform bulletPosition;
     readonly string bulletCaseString = "BulletCase";
     public GameObject bulletCase;
-    public Transform bulletCaseSpawnPosition;
+    public Transform bulletCasePosition;
     public int currentClipBulletCount = 10;
     public int maxClipBulletCount = 20;
     public int allBulletCount = 500;
@@ -42,9 +43,10 @@ public class WeaponInfo : MonoBehaviour
         gameObject.SetActive(true);
         if (weaponType == WeaponType.Gun)
         {
-            bulletSpawnPosition = transform.Find("BulletSpawnPosition");
+            bullet = (GameObject)Resources.Load(bulletString);
+            bulletPosition = transform.Find("BulletPosition");
             bulletCase = (GameObject)Resources.Load(bulletCaseString);
-            bulletCaseSpawnPosition = transform.Find("BulletCaseSpawnPosition");
+            bulletCasePosition = transform.Find("BulletCasePosition");
         }
         else
             attackCollider = transform.Find("AttackCollider").GetComponent<Collider>();

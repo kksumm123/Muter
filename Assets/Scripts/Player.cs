@@ -42,7 +42,10 @@ public class Player : Actor
     {
         if (weaponInfo != null)
         {
-            var newWeaponGo = Instantiate(weaponInfo, weaponPosition.position, Quaternion.identity, weaponPosition);
+            var newWeaponGo = Instantiate(weaponInfo, weaponPosition.position, Quaternion.identity);
+            newWeaponGo.transform.localScale = weaponPosition.lossyScale;
+            newWeaponGo.transform.parent = weaponPosition;
+            newWeaponGo.transform.localRotation = Quaternion.identity;
             newWeaponGo.Init();
             return newWeaponGo;
         }
@@ -249,9 +252,9 @@ public class Player : Actor
 
     #region Attack
     GameObject Bullet => currentWeapon.bullet;
-    Transform BulletSpawnPosition => currentWeapon.bulletSpawnPosition;
+    Transform BulletPosition => currentWeapon.bulletPosition;
     GameObject BulletCase => currentWeapon.bulletCase;
-    Transform BulletCaseSpawnPosition => currentWeapon.bulletCaseSpawnPosition;
+    Transform BulletCasePosition => currentWeapon.bulletCasePosition;
     float attackableTime;
     void Attack()
     {
@@ -282,8 +285,8 @@ public class Player : Actor
         yield return null;
         // Shot Animation Speed 3
         State = StateType.Shot;
-        var bulletGo = Instantiate(Bullet, BulletSpawnPosition.position, Quaternion.Euler(transform.forward));
-        Instantiate(BulletCase, BulletCaseSpawnPosition.position, Quaternion.identity);
+        var bulletGo = Instantiate(Bullet, BulletPosition.position, Quaternion.Euler(transform.forward));
+        Instantiate(BulletCase, BulletCasePosition.position, Quaternion.identity);
         // ÃÑ¾Ë ³Ë¹é ÀÛ¼ºÇØ¾ßÇÔ
         // bulletGo.knockBackForce = currentWeapon.knockBackForce;
 

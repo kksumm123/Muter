@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4925132650513559170}
   m_Layer: 0
-  m_Name: Bullet Case
+  m_Name: BulletCase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

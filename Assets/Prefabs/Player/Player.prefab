@@ -23,8 +23,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355434202}
-  m_LocalRotation: {x: -0.70710605, y: -0.70668554, z: -0.0000005553618, w: 0.024424901}
-  m_LocalPosition: {x: -8.1303005, y: 0.9999896, z: -2.3994586}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 8890668795959340003}
@@ -731,6 +731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 25
+  weaponPosition: {fileID: 355434203}
   mainWeapon: {fileID: 945450500392103011, guid: 09a030ca2b5a76e448296db656ff1b81, type: 3}
   subWeapon: {fileID: 574695946, guid: b00d69445e27e854f926909bee52c676, type: 3}
   meleeWeapon: {fileID: 5832004393287998669, guid: 81336aa98ee09714488cb12efdb20ed7, type: 3}
