@@ -38,8 +38,10 @@ public class Player : Actor
         LookAtMouse();
         Move();
         Jump();
+        Dodge();
         UseGravity();
     }
+
 
     #region StateUpdate
     void StateUpdate()
@@ -64,6 +66,11 @@ public class Player : Actor
             }
             else
                 State = StateType.Run;
+        }
+        else
+        {
+            if (jumpVelo.y > 0)
+                State = StateType.Jump;
         }
     }
 
@@ -146,6 +153,16 @@ public class Player : Actor
     }
     #endregion Jump
 
+    #region Dodge
+    void Dodge()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+        }
+    }
+    #endregion Dodge
+
     #region UseGravity
     void UseGravity()
     {
@@ -162,6 +179,8 @@ public class Player : Actor
         controller.Move(jumpVelo);
     }
     #endregion UseGravity
+
+
 
     #region StateType
     enum StateType
