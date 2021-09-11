@@ -11,6 +11,11 @@ public class Actor : MonoBehaviour
     }
 
     #region Methods
+    protected void PlayAnimation(string stateName)
+    {
+        animator.Play(stateName);
+    }
+
     protected float fastAimingDistance = 0.2f;
     protected float lookatRotationValue = 0.05f;
     protected void RotationSlerp(Vector3 dir)
