@@ -31,10 +31,14 @@ public class Player : Actor
     void Update()
     {
         StateUpdate();
-        UseGravity();
+
+        if (IsGround() == true)
+            InitGravity(); //¶¥¿¡ ´ê¾ÒÀ¸¸é
+
         LookAtMouse();
         Move();
         Jump();
+        UseGravity();
     }
 
     #region StateUpdate
@@ -57,8 +61,8 @@ public class Player : Actor
     LayerMask mapLayer;
     bool IsGround()
     {
-        //return IsHitRay(transform.position, Vector3.down, 0.1f);
-        return controller.isGrounded;
+        return IsHitRay(transform.position, Vector3.down, 0.1f);
+        //return controller.isGrounded;
     }
 
     bool IsHitRay(Vector3 pos, Vector3 dir, float distance)
@@ -67,33 +71,6 @@ public class Player : Actor
     }
     #endregion IsGround
     #endregion StateUpdate
-
-    #region UseGravity
-    void UseGravity()
-    {
-        if (IsGround() == true)
-        {
-            print("¶¥");
-            InitGravity(); //¶¥¿¡ ´ê¾ÒÀ¸¸é
-        }
-        else
-        {
-            print("°øÁß");
-            gravityAccelerationMove(); // ¶¥¿¡ ¾È´ê¾ÒÀ¸¸é
-        }
-
-    }
-    float t;
-    void gravityAccelerationMove()
-    {
-        t = Time.deltaTime;
-        s = gravityVelocity + (0.5f * gravityAcceleration * Mathf.Pow(t, 2));
-        gravityVelocity += gravityAcceleration * t;
-
-        jumpVelo.y -= s * t;
-        controller.Move(jumpVelo);
-    }
-    #endregion UseGravity
 
     #region LookAtMouse
     Plane plane = new Plane(new Vector3(0, 1, 0), 0);
@@ -131,7 +108,7 @@ public class Player : Actor
             relateMove = Camera.main.transform.forward * move.z;
             relateMove += Camera.main.transform.right * move.x;
             relateMove.y = 0;
-            //controller.Move(speed * Time.deltaTime * relateMove);
+            controller.Move(speed * Time.deltaTime * relateMove);
         }
     }
     #endregion Move
@@ -141,13 +118,30 @@ public class Player : Actor
     Vector3 jumpVelo;
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && IsGround())
         {
             State = StateType.Jump;
-            jumpVelo.y += Mathf.Sqrt(jumpForce * 3 * gravityAcceleration);
+            jumpVelo.y += jumpForce * 0.1f;
         }
     }
     #endregion Jump
+
+    #region UseGravity
+    void UseGravity()
+    {
+        gravityAccelerationMove();
+    }
+    float t;
+    void gravityAccelerationMove()
+    {
+        t = Time.deltaTime;
+        s = gravityVelocity + (0.5f * gravityAcceleration * Mathf.Pow(t, 2));
+        gravityVelocity += gravityAcceleration * t;
+
+        jumpVelo.y -= s * t;
+        controller.Move(jumpVelo);
+    }
+    #endregion UseGravity
 
     #region StateType
     enum StateType
