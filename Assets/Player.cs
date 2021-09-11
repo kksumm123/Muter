@@ -47,14 +47,34 @@ public class Player : Actor
         if (IsGround() == true)
         {
             if (move == Vector3.zero)
-                State = StateType.Idle;
+            {
+                switch (State)
+                {
+                    case StateType.Run:
+                        State = StateType.Idle;
+                        break;
+                    case StateType.Jump:
+                        State = StateType.Land;
+                        break;
+                    case StateType.Land:
+                        if (isLanded == false)
+                            StartCoroutine(LandToIdleCo());
+                        break;
+                }
+            }
             else
                 State = StateType.Run;
         }
-        else
-        {
+    }
 
-        }
+    bool isLanded = false;
+    float landTime = 0.64f;
+    IEnumerator LandToIdleCo()
+    {
+        isLanded = true;
+        yield return new WaitForSeconds(landTime);
+        State = StateType.Idle;
+        isLanded = false;
     }
 
     #region IsGround

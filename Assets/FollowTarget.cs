@@ -10,7 +10,7 @@ public class FollowTarget : MonoBehaviour
     float originSize;
     void Start()
     {
-        moveBackValue = new Vector3(0, 60, -50);
+        moveBackValue = new Vector3(0, 300, -250);
         rotateDegree = 0;
         originSize = Camera.main.orthographicSize;
     }
