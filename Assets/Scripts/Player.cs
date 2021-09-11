@@ -9,6 +9,12 @@ public class Player : Actor
 
     [SerializeField] float speed = 25f;
 
+    WeaponInfo currentWeapon;
+    [SerializeField] WeaponInfo mainWeapon;
+    [SerializeField] WeaponInfo subWeapon;
+    [SerializeField] WeaponInfo meleeWeapon;
+    [SerializeField] WeaponInfo throwWeapon;
+
     #region InitGravity
     float gravityAcceleration = 9.81f;
     float gravityVelocity;
@@ -26,6 +32,13 @@ public class Player : Actor
         controller = GetComponent<CharacterController>();
         mapLayer = 1 << LayerMask.NameToLayer("Map");
         InitGravity();
+        InitWeapon(mainWeapon);
+    }
+
+    void InitWeapon(WeaponInfo weapon)
+    {
+        currentWeapon = weapon;
+        currentWeapon.Init();
     }
 
     void Update()
@@ -199,7 +212,20 @@ public class Player : Actor
     #region Attack
     void Attack()
     {
-
+        if (Input.GetMouseButton(0))
+        {
+            switch (currentWeapon.weaponType)
+            {
+                case WeaponInfo.WeaponType.None:
+                    break;
+                case WeaponInfo.WeaponType.Gun:
+                    break;
+                case WeaponInfo.WeaponType.Melee:
+                    break;
+                case WeaponInfo.WeaponType.Throw:
+                    break;
+            }
+        }
     }
     #endregion Attack
 

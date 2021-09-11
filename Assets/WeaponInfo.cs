@@ -13,7 +13,7 @@ public class WeaponInfo : MonoBehaviour
     }
     public WeaponType weaponType;
     public float power = 20;
-    [SerializeField] float addedRandomPowerValue = 4;
+    public float addedRandomPowerValue = 4;
     public float delay = 0.2f;
     public float kncoBackForce = 1;
 
