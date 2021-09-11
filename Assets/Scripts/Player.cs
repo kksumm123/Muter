@@ -232,6 +232,8 @@ public class Player : Actor
     #region Attack
     GameObject Bullet => currentWeapon.bullet;
     Transform BulletSpawnPosition => currentWeapon.bulletSpawnPosition;
+    GameObject BulletCase => currentWeapon.bulletCase;
+    Transform BulletCaseSpawnPosition => currentWeapon.bulletCaseSpawnPosition;
     float attackableTime;
     void Attack()
     {
@@ -263,8 +265,10 @@ public class Player : Actor
         // Shot Animation Speed 3
         State = StateType.Shot;
         var bulletGo = Instantiate(Bullet, BulletSpawnPosition.position, Quaternion.Euler(transform.forward));
+        Instantiate(BulletCase, BulletCaseSpawnPosition.position, Quaternion.identity);
         // ÃÑ¾Ë ³Ë¹é ÀÛ¼ºÇØ¾ßÇÔ
         // bulletGo.knockBackForce = currentWeapon.knockBackForce;
+
         yield return new WaitForSeconds(currentWeapon.delay);
         State = StateType.Idle;
     }

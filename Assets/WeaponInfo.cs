@@ -20,6 +20,9 @@ public class WeaponInfo : MonoBehaviour
     [Header("รั")]
     public GameObject bullet;
     public Transform bulletSpawnPosition;
+    readonly string bulletCaseString = "BulletCase";
+    public GameObject bulletCase;
+    public Transform bulletCaseSpawnPosition;
     public int currentClipBulletCount = 10;
     public int maxClipBulletCount = 20;
     public int allBulletCount = 500;
@@ -36,8 +39,13 @@ public class WeaponInfo : MonoBehaviour
 
     public void Init()
     {
+
         if (weaponType == WeaponType.Gun)
+        {
             bulletSpawnPosition = transform.Find("BulletSpawnPosition");
+            bulletCase = (GameObject)Resources.Load(bulletCaseString);
+            bulletCaseSpawnPosition = transform.Find("BulletCaseSpawnPosition");
+        }
         else
             attackCollider = transform.Find("AttackCollider").GetComponent<Collider>();
     }
