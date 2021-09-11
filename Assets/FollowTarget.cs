@@ -22,6 +22,7 @@ public class FollowTarget : MonoBehaviour
         ZoomInOut();
     }
 
+    #region RelativeRotation
     [SerializeField] float rotateDegreeValue = 5;
     float rotateDegree;
     float forwardDegree;
@@ -45,23 +46,29 @@ public class FollowTarget : MonoBehaviour
         transform.Translate(moveBackValue);
         transform.LookAt(target);
     }
+    #endregion RelativeRotation
 
+    #region ZoomInOut
     float scrollMult = 1;
     float minScrollMultValue = 0.5f;
     float maxScrollMultValue = 2;
     float tempScrollDeltaY;
     void ZoomInOut()
     {
+        if (Input.GetMouseButtonDown(2))
+            scrollMult = 1;
+
         tempScrollDeltaY = Input.mouseScrollDelta.y;
         if (tempScrollDeltaY != 0)
         {
             scrollMult -= tempScrollDeltaY * 0.1f;
             scrollMult = Mathf.Min(scrollMult, maxScrollMultValue);
             scrollMult = Mathf.Max(scrollMult, minScrollMultValue);
-            Camera.main.orthographicSize = originSize * scrollMult;
         }
-    }
 
+        Camera.main.orthographicSize = originSize * scrollMult;
+    }
+    #endregion ZoomInOut
 }
 static public class MyExtension
 {
