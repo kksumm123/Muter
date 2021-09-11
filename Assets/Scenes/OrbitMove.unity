@@ -414,7 +414,7 @@ MonoBehaviour:
   target: {fileID: 1463999024}
   moveBackValue: {x: 0, y: 12, z: -10}
   rotateDegreeValue: 2
-  rotateDegree: 0
+  rotateDegree: 177.11
 --- !u!114 &1306442212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,8 +438,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1306442210}
-  m_LocalRotation: {x: 0.4241554, y: -0.000000019792287, z: 0.000000009270211, w: 0.90558946}
-  m_LocalPosition: {x: 0.0000004371139, y: 12, z: -10}
+  m_LocalRotation: {x: 0, y: -0.000000021855694, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1047738390}

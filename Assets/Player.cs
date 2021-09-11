@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : Actor
 {
-    [SerializeField] float speed = 15f;
+    [SerializeField] float speed = 25f;
     void Start()
     {
 
@@ -59,14 +59,6 @@ public class Player : Actor
     #endregion LookAtMouse
 
     #region Methods
-    float fastAimingDistance = 0.2f;
-    float lookatRotationValue = 0.05f;
-    void RotationSlerp(Vector3 dir)
-    {
-        if (Vector3.Distance(transform.forward, dir) < fastAimingDistance)
-            transform.forward = Vector3.Slerp(transform.forward, dir, lookatRotationValue * 10);
-        else
-            transform.forward = Vector3.Slerp(transform.forward, dir, lookatRotationValue);
-    }
+
     #endregion Methods
 }
