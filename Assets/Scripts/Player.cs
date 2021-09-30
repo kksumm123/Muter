@@ -2,7 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/*
+TodoList
+모든 탄약은 Player에서 관리할 것.
 
+무기 교체할 때마다 새로이 Instantiate함, 비활성/활성으로 바꿔야함.
+왜? 교체할 때마다 탄이 꽉차게 될테니
+
+총알 넉백등에 대한 구현 해줘야 함
+
+UI 만들자
+
+귀찬타ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
+ */
 public class Player : Actor
 {
     CharacterController controller;

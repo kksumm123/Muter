@@ -26,8 +26,6 @@ public class WeaponInfo : MonoBehaviour
     public Transform bulletCasePosition;
     public int currentClipBulletCount = 10;
     public int maxClipBulletCount = 20;
-    public int allBulletCount = 500;
-    public int maxBulletCount = 500;
     public float reloadTime = 2;
 
     [Header("±Ÿ¡¢")]
