@@ -296,6 +296,8 @@ public class Player : Actor
             }
         }
     }
+
+    float waitShotEndTime = 0.5f;
     IEnumerator AttackShotCo()
     {
         // Shot Animation Speed 3
@@ -309,6 +311,7 @@ public class Player : Actor
 
         yield return new WaitForSeconds(currentWeapon.delay);
         State = StateType.ShotEnd;
+        yield return new WaitForSeconds(waitShotEndTime);
         PlayAnimation("Idle", 0);
     }
     #endregion Attack
