@@ -54,7 +54,8 @@ public class Player : Actor
     }
     void ChangeWeapon(WeaponInfo weaponInfo)
     {
-        Destroy(currentWeapon);
+        if (currentWeapon != null)
+            Destroy(currentWeapon.gameObject);
 
         currentWeapon = InitWeapon(weaponInfo);
 
@@ -78,10 +79,25 @@ public class Player : Actor
                 Jump();
                 Dodge();
                 Attack();
+                SelectWeapon();
             }
         }
         UseGravity();
     }
+
+    #region SelectWeapon
+    private void SelectWeapon()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            ChangeWeapon(mainWeapon);
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+            ChangeWeapon(subWeapon);
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+            ChangeWeapon(meleeWeapon);
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+            ChangeWeapon(throwWeapon);
+    }
+    #endregion SelectWeapon
 
 
     #region StateUpdate
@@ -256,6 +272,7 @@ public class Player : Actor
     GameObject BulletCase => currentWeapon.bulletCase;
     Transform BulletCasePosition => currentWeapon.bulletCasePosition;
     float attackableTime;
+    Coroutine attackShotCoHandle;
     void Attack()
     {
         if (Input.GetMouseButton(0))
@@ -268,7 +285,7 @@ public class Player : Actor
                         Debug.LogError($"오류 : 무기 타입 None, {currentWeapon}");
                         return;
                     case WeaponInfo.WeaponType.Gun:
-                        currentWeapon.StartCoroutine(AttackShotCo());
+                        attackShotCoHandle = StopAndStartCo(attackShotCoHandle, AttackShotCo());
                         break;
                     case WeaponInfo.WeaponType.Melee:
                         break;
@@ -279,7 +296,6 @@ public class Player : Actor
             }
         }
     }
-
     IEnumerator AttackShotCo()
     {
         // Shot Animation Speed 3
@@ -293,6 +309,7 @@ public class Player : Actor
 
         yield return new WaitForSeconds(currentWeapon.delay);
         State = StateType.ShotEnd;
+        PlayAnimation("Idle", 0);
     }
     #endregion Attack
 
@@ -312,8 +329,6 @@ public class Player : Actor
         controller.Move(jumpVelo);
     }
     #endregion UseGravity
-
-
 
     #region StateType
     enum StateType
@@ -345,7 +360,7 @@ public class Player : Actor
             switch (m_state)
             {
                 case StateType.ShotEnd:
-                    return;
+                    break;
                 case StateType.Shot:
                     PlayAnimation(m_state.ToString(), 0);
                     break;
@@ -366,6 +381,17 @@ public class Player : Actor
     #endregion StateType
 
     #region Methods
+    void StopCo(Coroutine handle)
+    {
+        if (handle != null)
+            StopCoroutine(handle);
 
+        return;
+    }
+    Coroutine StopAndStartCo(Coroutine handle, IEnumerator Fn)
+    {
+        StopCo(handle);
+        return StartCoroutine(Fn);
+    }
     #endregion Methods
 }
